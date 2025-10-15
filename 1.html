@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Portfolio - Heartbeat Edition</title>
+    <!-- Tải Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tải Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Thiết lập font Inter */
+        html { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+
+        /* Animation cho card khi xuất hiện */
+        .fade-in-up {
+            animation: fadeInUp 0.5s ease-out forwards;
+            opacity: 0;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Hiệu ứng nổi bật của Card (dùng cho cả trang nhóm và portfolio) */
+        .card-effect {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 1.5rem; /* rounded-3xl */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+            border: 2px solid transparent;
+        }
+        .card-effect:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(244, 63, 94, 0.4), 0 10px 10px -5px rgba(244, 63, 94, 0.08); 
+            border-color: #088efc;
+        }
+        
+        .page-transition {
+            transition: opacity 0.5s ease;
+        }
+
+        @keyframes heartPulse {
+            0% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.8; }
+        }
+        .animate-heart-pulse {
+            animation: heartPulse 2s infinite ease-in-out;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-theme': '#ec4899',
+                        'secondary-bg': '#fef3f6',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body style="background-color: #2c9b00;">
+
+    <!-- Dữ liệu Mẫu của Nhóm -->
+    <script>
+        // Inline SVG Data URL cho Heart Avatar
+
+        const teamMembers = [
+            {
+                id: 'member-tuananh',
+                name: 'Hoàng Văn Tuấn Anh',
+                role: 'Thành viên nhóm',
+                hometown: 'Thanh Hóa',
+                socials: {
+                    facebook: 'https://www.facebook.com/share/17BKtNafF6/',
+
+                
+                },
+                profileImage: 'https://placehold.co/400x400/9333ea/ffffff?text=Tuan+Anh',
+                images: [
+                ],
+                hobbies: ['Chơi đàn Guitar', 'Lập trình game nhỏ', 'Du lịch'],
+                skills: [
+                    'Node.js & Express', 
+                    'React & Redux', 
+                    'Database Architecture', 
+                    'Cloud Deployment (AWS)',
+                    'Microservices'
+                ],
+                projects: [
+                    { },
+                    { },
+                    { },
+                ],
+                cvLink: 'cv_hoang_van_tuan_anh.pdf',
+            },
+            {
+                id: 'member-ngocphu',
+                role:'Thành viên nhóm',
+                name: 'Nguyễn Ngọc Phú',
+                hometown: 'An Giang',
+                socials: {
+                    facebook: 'https://www.facebook.com/share/1AvFwbmmYP/',
+ 
+                },
+                profileImage: 'https://placehold.co/400x400/ec4899/ffffff?text=Ngoc+Phu',
+                images: [
+                    
+                ],
+                hobbies: ['Vẽ tranh', 'Đọc tiểu thuyết'],
+                skills: [
+                    'Figma & Sketch', 
+                    'User Research', 
+                    'Information Architecture', 
+                    'Prototyping',
+                    'Motion Graphics (After Effects)'
+                ],
+                projects: [
+                    { },
+                    { },
+                ],
+                cvLink: 'cv_nguyen_ngoc_phu.pdf',
+            },
+            {
+                id: 'member-baotan',
+                role:'Thành viên nhóm',
+                name: 'Hoàng Bá Bảo Tân',
+                hometown: 'Đà Nẵng',
+                socials: {
+                    facebook: 'https://www.facebook.com/share/1KCGvCCUqr/',
+
+                },
+                profileImage: 'https://placehold.co/400x400/0891b2/ffffff?text=Bao+Tan',
+                images: [
+                    
+                ],
+                hobbies: [ 'Nuôi cá', 'Tìm hiểu về bảo mật mạng'],
+                skills: [
+                    'Docker & Kubernetes', 
+                    'Terraform (IaC)', 
+                    'CI/CD (GitLab/Jenkins)', 
+                    'Linux & Shell Scripting',
+                    'System Hardening'
+                ],
+                projects: [
+                    { },
+                    { },
+                    { },
+                ],
+                cvLink: 'cv_hoang_ba_bao_tan.pdf',
+            },
+            {
+                id: 'member-ngocnhi',
+                role: 'Nhóm trưởng',
+                name: 'Hồ Ngọc Nhi',
+                hometown: 'Huế Mộng Mơ',
+                socials: {
+                    facebook: 'https://www.facebook.com/share/1GkBWPM5VU/',
+
+                },
+                // Sử dụng Heart Avatar SVG Data URL
+                profileImage: 'https://placehold.co/400x400/0891b2/ffffff?text=Ngoc+Nhi', 
+                images: [
+                    
+                ],
+                hobbies: ['Nghiên cứu văn hóa', 'Chăm sóc cây cảnh', 'Thích cà phê sách'],
+                skills: [
+                    'Python (Pandas/NumPy)', 
+                    'Data Visualization (D3.js)', 
+                    'SQL & ETL', 
+                    'Power BI / Tableau',
+                    'Statistical Analysis'
+                ],
+                projects: [
+                    { },
+                    { },
+                    { },
+                ],
+                cvLink: 'cv_ho_ngoc_nhi.pdf',
+            }
+        ];
+    </script>
+
+
+    <!-- 1. HEADER CHUNG (Flex Layout) -->
+    <header class="sticky top-0 z-10 bg-white border-b border-rose-100 shadow-md">
+        <div class="max-w-7xl mx-auto p-4 flex justify-between items-center">
+            <h1 class="text-xl sm:text-2xl font-extrabold text-gray-900">
+                <a href="#" onclick="showPage('team-page')" class="text-primary-theme hover:opacity-80 transition duration-300 flex items-center">
+             
+                </a>
+            </h1>
+            
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto p-4 sm:p-8">
+
+        <!-- 2. TRANG NHÓM (TEAM LANDING PAGE) - Dùng Grid Layout -->
+        <section id="team-page" class="page-transition">
+            <div class="text-center mb-16 pt-8">
+                <h2 class="text-4xl sm:text-5xl font-extrabold mb-4 text-gray-900">
+                    <span style="color: blue;">GIỚI THIỆU THÀNH VIÊN NHÓM</span>
+                </h2>
+                <h3 style="color: rgb(255, 0, 0);"><b>1 THÀNH ĐÔI, 2 THÀNH KHÚC</b></h3>
+            </div>
+
+            <!-- Grid Layout cho danh sách thành viên: 2 cột trên tablet, 3 cột trên desktop -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" id="team-member-cards">
+                <!-- Cards sẽ được chèn bằng JS -->
+            </div>
+        </section>
+
+        <!-- 3. TRANG PORTFOLIO CÁ NHÂN - Dùng Flex & Grid Layout -->
+        <section id="portfolio-page" class="hidden opacity-0 page-transition">
+            
+            <!-- Nút Quay Lại -->
+            <button onclick="showPage('team-page')">
+                <i></i> <b><-Quay lại danh sách</b>
+            </button>
+
+            <!-- Khối Chính: Thông tin & Giới thiệu (Flex Layout) -->
+            <div id="portfolio-header" class="bg-white rounded-3xl p-6 sm:p-10 shadow-2xl border border-rose-200 mb-10 card-effect">
+                <!-- Nội dung được chèn bằng JS -->
+            </div>
+
+            <!-- Khối chi tiết: Dự án, Kỹ năng, Hình ảnh (Grid Layout Chính) -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                <!-- Cột 1: Kỹ Năng & Sở Thích -->
+                <div class="lg:col-span-1 space-y-8">
+                    <!-- Kỹ Năng (Skills) -->
+                    <div id="skills-section" class="bg-white p-6 rounded-3xl shadow-lg border border-rose-200 card-effect fade-in-up" style="animation-delay: 0.1s;">
+                        <h3 class="text-2xl font-extrabold text-gray-800 mb-4 flex items-center border-b pb-2">
+                            <i data-lucide="zap" class="w-6 h-6 mr-2 text-yellow-500"></i> Skills
+                        </h3>
+                        <!-- Flex Wrap cho Skills -->
+                        <div class="flex flex-wrap gap-2" id="skills-list">
+                            <!-- Danh sách skills được chèn bằng JS -->
+                        </div>
+                    </div>
+
+                    <!-- Sở Thích (Hobbies) -->
+                    <div id="hobbies-section" class="bg-white p-6 rounded-3xl shadow-lg border border-rose-200 card-effect fade-in-up" style="animation-delay: 0.2s;">
+                        <h3 class="text-2xl font-extrabold text-gray-800 mb-4 flex items-center border-b pb-2">
+                            <i data-lucide="smile" class="w-6 h-6 mr-2 text-pink-500"></i> Hobbies
+                        </h3>
+                        <ul class="space-y-3 text-gray-600" id="hobbies-list">
+                            <!-- Danh sách hobbies được chèn bằng JS -->
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Cột 2 & 3: Dự Án & Hình Ảnh -->
+                <div class="lg:col-span-2 space-y-8">
+                    <!-- Dự Án (Projects) -->
+                    <div id="projects-section" class="bg-white p-6 rounded-3xl shadow-lg border border-rose-200 card-effect fade-in-up" style="animation-delay: 0.3s;">
+                        <h3 class="text-2xl font-extrabold text-gray-800 mb-4 flex items-center border-b pb-2">
+                            <i data-lucide="package-search" class="w-6 h-6 mr-2 text-green-500"></i> Projects
+                        </h3>
+                        <!-- Grid Layout cho Projects -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="projects-list">
+                            <!-- Danh sách projects được chèn bằng JS -->
+                        </div>
+                    </div>
+
+                    <!-- Hình Ảnh (Gallery) - Dùng Grid -->
+                    <div id="gallery-section" class="bg-white p-6 rounded-3xl shadow-lg border border-rose-200 card-effect fade-in-up" style="animation-delay: 0.4s;">
+                        <h3 class="text-2xl font-extrabold text-gray-800 mb-4 flex items-center border-b pb-2">
+                            <i data-lucide="gallery-vertical" class="w-6 h-6 mr-2 text-indigo-500"></i> Photo Gallery
+                        </h3>
+                        <!-- Grid Layout cho hình ảnh -->
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3" id="image-gallery">
+                            <!-- Hình ảnh được chèn bằng JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 4. FOOTER CHUNG -->
+   
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Hàm chuyển đổi trang với hiệu ứng fade
+        function showPage(pageId) {
+            const teamPage = document.getElementById('team-page');
+            const portfolioPage = document.getElementById('portfolio-page');
+            
+            let currentPage = pageId === 'team-page' ? portfolioPage : teamPage;
+            let nextPage = pageId === 'team-page' ? teamPage : portfolioPage;
+
+            // 1. Áp dụng fade-out cho trang hiện tại (nếu đang hiển thị)
+            if (!currentPage.classList.contains('hidden')) {
+                currentPage.classList.remove('opacity-100');
+                currentPage.classList.add('opacity-0');
+                
+                setTimeout(() => {
+                    currentPage.classList.add('hidden');
+                    currentPage.classList.remove('opacity-0');
+
+                    // 2. Hiện trang mới và áp dụng fade-in
+                    nextPage.classList.remove('hidden');
+                    setTimeout(() => nextPage.classList.add('opacity-100'), 10);
+                }, 500); // 500ms là thời gian transition
+            } else {
+                // Trường hợp khởi tạo (cả hai đều ẩn, hoặc chỉ trang team hiển thị)
+                nextPage.classList.remove('hidden');
+                nextPage.classList.add('opacity-100');
+                if (pageId === 'portfolio-page') {
+                    teamPage.classList.add('hidden');
+                }
+            }
+            
+            // Cuộn lên đầu trang
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Tạo thẻ thành viên trên trang nhóm (Grid)
+        function createMemberCards() {
+            const container = document.getElementById('team-member-cards');
+            container.innerHTML = ''; 
+
+            teamMembers.forEach((member, index) => {
+                const isHeartAvatar = member.profileImage.startsWith('data:image/svg');
+                
+                let avatarHtml;
+                if (isHeartAvatar) {
+                    // Nếu là SVG Data URL (Avatar Trái Tim)
+                    avatarHtml = `<img src="${member.profileImage}" alt="Heart Avatar" 
+                                 class="w-36 h-36 object-cover rounded-full border-4 border-rose-500 shadow-xl p-2 bg-white animate-heart-pulse">`;
+                } else {
+                     avatarHtml = `<img src="${member.profileImage}" alt="Ảnh đại diện ${member.name}" 
+                                 class="w-36 h-36 object-cover rounded-full border-4 border-primary-theme/50 transition duration-500 hover:scale-105 hover:shadow-lg">`;
+                }
+
+                const card = `
+                    <div class="bg-white p-8 text-center border-2 border-transparent card-effect fade-in-up" style="animation-delay: ${0.1 * (index + 1)}s;" onclick="renderPortfolio('${member.id}')">
+                        <div class="flex justify-center mb-6">
+                            ${avatarHtml}
+                        </div>
+                        <h3 class="text-2xl font-extrabold text-gray-900 mb-1">${member.name}</h3>
+                        <p class="text-primary-theme font-semibold mb-4 text-sm">${member.role}</p>
+                        
+                        <!-- Flex Layout cho Social Links -->
+                        <div class="flex justify-center space-x-4 mb-6">
+                            ${member.socials.linkedin ? `<a href="${member.socials.linkedin}" target="_blank" onclick="event.stopPropagation()" class="text-gray-500 hover:text-blue-600 transition duration-300"><i data-lucide="linkedin" class="w-6 h-6"></i></a>` : ''}
+                            ${member.socials.github ? `<a href="${member.socials.github}" target="_blank" onclick="event.stopPropagation()" class="text-gray-500 hover:text-gray-900 transition duration-300"><i data-lucide="github" class="w-6 h-6"></i></a>` : ''}
+                            ${member.socials.facebook ? `<a href="${member.socials.facebook}" target="_blank" onclick="event.stopPropagation()" class="text-gray-500 hover:text-blue-800 transition duration-300"><i data-lucide="facebook" class="w-6 h-6"></i></a>` : ''}
+                        </div>
+
+                        <button class="w-full bg-black text-white py-3 rounded-full transition duration-300 shadow-lg flex items-center justify-center text-base">
+                            Xem Profile
+                        </button>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', card);
+            });
+            // Tải lại icon cho các thẻ mới
+            lucide.createIcons();
+        }
+
+        // Hiển thị nội dung Portfolio chi tiết
+        function renderPortfolio(memberId) {
+            const member = teamMembers.find(m => m.id === memberId);
+            if (!member) return;
+            
+            const isHeartAvatar = member.profileImage.startsWith('data:image/svg');
+
+            // Xác định class CSS cho ảnh đại diện trong Portfolio Header
+            const profileImageClass = isHeartAvatar 
+                ? 'w-40 h-40 object-cover rounded-2xl shadow-xl border-4 border-rose-500/50 p-4 bg-white animate-heart-pulse'
+                : 'w-40 h-40 object-cover rounded-2xl shadow-xl border-4 border-primary-theme/30 transform hover:scale-[1.05] transition duration-300';
+
+
+            // --- 1. Header Portfolio (Thông tin - Flex) ---
+            document.getElementById('portfolio-header').innerHTML = `
+                <div class="flex flex-col md:flex-row items-start md:items-center space-y-6 md:space-y-0 md:space-x-10">
+                    <!-- Ảnh Đại Diện -->
+                    <img src="${member.profileImage}" alt="Ảnh ${member.name}" 
+                         class="${profileImageClass}">
+                    
+                    <!-- Thông tin & CTA -->
+                    <div class="flex-1">
+                        <p class="text-sm font-bold text-rose-500 mb-1 tracking-wider">${member.role}</p>
+                        <h2 class="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-3">${member.name}</h2>
+                        
+                        <!-- Thông tin cơ bản (Flex Wrap) -->
+                        <div class="flex items-center space-x-4 text-gray-600 mb-6 flex-wrap">
+                            <p class="flex items-center text-base mb-1 sm:mb-0"><i data-lucide="map-pin" class="w-4 h-4 mr-1 text-red-500"></i> ${member.hometown}</p>
+                            ${member.socials.linkedin ? `<a href="${member.socials.linkedin}" target="_blank" class="flex items-center text-base hover:text-blue-600 transition duration-200 mb-1 sm:mb-0"><i data-lucide="linkedin" class="w-4 h-4 mr-1"></i> LinkedIn</a>` : ''}
+                            ${member.socials.github ? `<a href="${member.socials.github}" target="_blank" class="flex items-center text-base hover:text-gray-900 transition duration-200 mb-1 sm:mb-0"><i data-lucide="github" class="w-4 h-4 mr-1"></i> GitHub</a>` : ''}
+                            ${member.socials.facebook ? `<a href="${member.socials.facebook}" target="_blank" class="flex items-center text-base hover:text-blue-800 transition duration-200 mb-1 sm:mb-0"><i data-lucide="facebook" class="w-4 h-4 mr-1"></i> Facebook</a>` : ''}
+                        </div>
+                        
+                        <!-- Download CV Button -->
+                        <a href="${member.cvLink}" download class="bg-rose-500 text-white px-6 py-3 rounded-full font-bold hover:bg-red-600 transition duration-300 shadow-xl flex items-center w-fit text-sm transform hover:scale-[1.03] animate-pulse-static">
+                            <i data-lucide="file-text" class="w-5 h-5 mr-2"></i> Tải CV Hồ Sơ
+                        </a>
+                    </div>
+                </div>
+            `;
+
+            // --- 2. Kỹ Năng (Skills - Flex Wrap) ---
+            const skillsHtml = member.skills.map(skill => `
+                <span class="bg-primary-theme/10 text-primary-theme text-base font-semibold px-4 py-1.5 rounded-full border border-primary-theme/50 shadow-md transition duration-300 hover:bg-primary-theme hover:text-white cursor-default">${skill}</span>
+            `).join('');
+            document.getElementById('skills-list').innerHTML = skillsHtml;
+
+            // --- 3. Sở Thích (Hobbies) ---
+            const hobbiesHtml = member.hobbies.map(hobby => `
+                <li class="flex items-start text-lg text-gray-700">
+                    <i data-lucide="bookmark" class="w-5 h-5 mr-3 text-rose-500 mt-1 flex-shrink-0"></i> <span>${hobby}</span>
+                </li>
+            `).join('');
+            document.getElementById('hobbies-list').innerHTML = hobbiesHtml;
+
+            // --- 4. Dự Án (Projects - Grid) ---
+            const projectsHtml = member.projects.map(project => `
+                <div class="p-5 border-2 border-rose-100 rounded-2xl bg-white hover:bg-rose-50 transition duration-300 hover:shadow-xl">
+                    <h4 class="text-xl font-extrabold text-gray-900 mb-1">${project.name}</h4>
+                    <span class="text-xs font-bold text-rose-600 bg-rose-200/50 px-3 py-1 rounded-full">${project.type}</span>
+                    <p class="text-sm text-gray-500 mt-3">${project.description}</p>
+                </div>
+            `).join('');
+            document.getElementById('projects-list').innerHTML = projectsHtml;
+
+            // --- 5. Thư Viện Hình Ảnh (Gallery - Grid) ---
+            const galleryHtml = member.images.map(imgUrl => `
+                <img src="${imgUrl}" alt="Hình ảnh cá nhân" 
+                     class="w-full h-32 object-cover rounded-xl shadow-lg transition duration-500 transform hover:scale-[1.02] hover:shadow-2xl cursor-pointer border border-rose-200">
+            `).join('');
+            document.getElementById('image-gallery').innerHTML = galleryHtml;
+
+
+            // Sau khi nội dung được chèn, hiển thị trang Portfolio
+            showPage('portfolio-page');
+            
+            // Tải lại icon
+            lucide.createIcons();
+        }
+
+        // Khởi tạo trang khi tải xong
+        window.onload = () => {
+            createMemberCards();
+            // Tải lại icon ban đầu
+            lucide.createIcons();
+
+            // Thêm animation CSS cho hiệu ứng nút
+            const style = document.createElement('style');
+            style.innerHTML = `
+                @keyframes pulse-left {
+                    0%, 100% { transform: translateX(0); }
+                    50% { transform: translateX(-3px); }
+                }
+                .animate-pulse-left {
+                    animation: pulse-left 1.5s infinite;
+                }
+                @keyframes pulse-static {
+                    0%, 100% { box-shadow: 0 4px 6px -1px rgba(244, 63, 94, 0.5), 0 2px 4px -2px rgba(244, 63, 94, 0.5); }
+                    50% { box-shadow: 0 8px 10px -3px rgba(244, 63, 94, 0.7), 0 4px 6px -4px rgba(244, 63, 94, 0.7); }
+                }
+                .animate-pulse-static {
+                    animation: pulse-static 3s infinite;
+                }
+            `;
+            document.head.appendChild(style);
+        };
+    </script>
+</body>
+</html>
